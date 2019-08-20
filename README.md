@@ -26,6 +26,13 @@ The network takes a n long sequence of burst images and outputs 1 sharper image.
 * We use Radam optimizer instead of Adam as the network seems to require warm-up to converge to a good solution. We conducted several experiments that showed improved performance using the Radam optimizer [Paper](https://arxiv.org/pdf/1908.03265v1.pdf ).
 * The data generation might not be exactly identical to the one described in the paper. The procedure described in the paper is rather unclear, however similar looking burst images are generated with our pipeline.
 
+### Results
+
+The network is fed 1..n bursted image and makes a sharper prediction. Below are some qualitive results.
+
+![result0](img/image_0.png)
+![result1](img/image_1.png)
+
 ### Instructions
 
 #### Download data
