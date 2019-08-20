@@ -43,5 +43,5 @@ tensorboard --logdir=../path_to_output/runs/
 #### Evaluation
 To evaluate model
 ```
-python eval.py
+python eval.py --exp_path '[../path_to_experiments]' --out_path '../path_to_output'
 ```
