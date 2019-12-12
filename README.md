@@ -36,7 +36,7 @@ The network is fed 1..n bursted image and makes a sharper prediction. Below are 
 ### Instructions
 
 #### Download data
-We use imagenet data for the experiments [Download](http://www.image-net.org/challenges/LSVRC/2011/registered-downloads).
+We use imagenet data for the experiments [Download](http://image-net.org/).
 
 #### Training
 To train the model simple run
