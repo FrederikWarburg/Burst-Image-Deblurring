@@ -41,7 +41,7 @@ def homography_alignment(target, im, number_of_iterations = 10):
 
     # Convert images to grayscale
     im1_gray = cv2.cvtColor(target, cv2.COLOR_RGB2GRAY)
-    im2_gray = cv2.cvtColor(target, cv2.COLOR_RGB2GRAY)
+    im2_gray = cv2.cvtColor(im, cv2.COLOR_RGB2GRAY)
 
     # Find size of image1
     sz = im.shape
