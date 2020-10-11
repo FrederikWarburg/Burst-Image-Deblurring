@@ -152,7 +152,7 @@ class Dataset(data.Dataset):
         return len(self.images)
 
     def __getitem__(self, index):
-
+        
         target = cv2.cvtColor(cv2.imread(os.path.join(self.path, self.images[index])), cv2.COLOR_BGR2RGB)
         target = cv2.resize(target, (self.size, self.size))
 

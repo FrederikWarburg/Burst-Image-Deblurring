@@ -10,9 +10,8 @@ from tools import Dataset
 from burstloss import BurstLoss
 import torch
 import argparse
-from cycliclr import CyclicLR
 from helpers import get_newest_model, make_im
-from tensorboardX import SummaryWriter
+from torch.utils.tensorboard import SummaryWriter
 from torch.optim.lr_scheduler import StepLR
 from radam import RAdam
 
@@ -40,7 +39,7 @@ def main():
     print(args)
     print()
 
-    if not os.path.isdir(args.results): os.mkdir(args.results)
+    if not os.path.isdir(args.results): os.makedirs(args.results)
 
     PATH = args.results
     if not args.resume:

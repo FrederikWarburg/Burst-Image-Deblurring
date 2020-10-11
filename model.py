@@ -75,13 +75,13 @@ class UNet(nn.Module):
 
         # Encode
         self.conv_encode1 = self.conv_elu(in_channels=in_channel,   out_channels= 64,  kernel_size= 3) #id 1
-        self.conv_encode2 = self.contracting_block(in_channels= (1+k)*64,  out_channels= 128, kernel_size= 4) #id 4, 5
-        self.conv_encode3 = self.contracting_block(in_channels= (1+k)*128, out_channels= 256, kernel_size= 4) #id 8, 9
-        self.conv_encode4 = self.contracting_block(in_channels= (1+k)*256, out_channels= 384, kernel_size= 4) #id 12, 13
+        self.conv_encode2 = self.contracting_block(in_channels= 2*64,  out_channels= 128, kernel_size= 4) #id 4, 5
+        self.conv_encode3 = self.contracting_block(in_channels= 2*128, out_channels= 256, kernel_size= 4) #id 8, 9
+        self.conv_encode4 = self.contracting_block(in_channels= 2*256, out_channels= 384, kernel_size= 4) #id 12, 13
 
         # Bottleneck
         self.bottleneck = torch.nn.Sequential(
-            WeightNorm(torch.nn.Conv2d(kernel_size=1, in_channels=(1+k)*384, out_channels=384), name = "weight"), #id 16
+            WeightNorm(torch.nn.Conv2d(kernel_size=1, in_channels=2*384, out_channels=384), name = "weight"), #id 16
             torch.nn.ELU(),
             torch.nn.BatchNorm2d(384),
             WeightNorm(torch.nn.Conv2d(kernel_size=4, in_channels=384, out_channels=384, stride=2), name = "weight"), #id 17
@@ -93,10 +93,10 @@ class UNet(nn.Module):
             WeightNorm(torch.nn.ConvTranspose2d(kernel_size=4, in_channels=384, out_channels=384, stride=2), name = "weight") #id 19
         )
         # Decode
-        self.conv_decode3 = self.expansive_block(in_channels = 384 + 384, out_channels= 256, mid_channel= 384) #id 22, 23, 24
-        self.conv_decode2 = self.expansive_block(in_channels = 256 + 256, out_channels= 192, mid_channel= 256) #id 27, 28, 29
-        self.conv_decode1 = self.expansive_block(in_channels = 192 + 128, out_channels= 96 , mid_channel= 192) #id 32, 33, 34
-        self.conv_decode0 = self.conv_elu(in_channels= 96 + 64, out_channels= 96,  kernel_size= 3)             #id 37, 38
+        self.conv_decode3 = self.expansive_block(in_channels = 3 * 384, out_channels= 256, mid_channel= 384) #id 22, 23, 24
+        self.conv_decode2 = self.expansive_block(in_channels = 3 * 256, out_channels= 192, mid_channel= 256) #id 27, 28, 29
+        self.conv_decode1 = self.expansive_block(in_channels = 2 * 192 + 128, out_channels= 96 , mid_channel= 192) #id 32, 33, 34
+        self.conv_decode0 = self.conv_elu(in_channels= 2*96 + 64, out_channels= 96,  kernel_size= 3)             #id 37, 38
         self.final_layer  = self.final_block(in_channels=96, out_channels = out_channel, mid_channel= 64)      #id 40, 41
 
         self.pooling = GlobalMaxPool()
@@ -106,7 +106,7 @@ class UNet(nn.Module):
         b, im, c, h, w = x.size()
 
         x = x.view(b*im, c, h, w)
-        max_ = max_.repeat(1, im, 1, 1, 1).view(b*im, c*self.k, h, w)
+        max_ = max_.repeat(1, im, 1, 1, 1).view(b*im, c, h, w)
         output = torch.cat([x, max_], dim=1)
 
         return output
@@ -117,7 +117,7 @@ class UNet(nn.Module):
 
         x = x.view(b * im, c1, h, w)
         y = y.view(b * im, c2, h, w)
-        max_ = max_.repeat(1, im, 1, 1, 1).view(b * im, c1*self.k, h, w)
+        max_ = max_.repeat(1, im, 1, 1, 1).view(b * im, c1, h, w)
         output = torch.cat([x, max_, y], dim=1)
 
         return output

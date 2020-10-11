@@ -22,7 +22,7 @@ def make_im(pred, X_batch, target):
     image = np.zeros((3, h, (w + 5) * (im + 2)))
     image[:, :, :w] = target[0, :, :, :].detach().cpu().numpy()
 
-    image[:, :, w + 5:2 * w + 5] = pred[0, :, :, :].detach().cpu().numpy()
+    image[:, :, (w+5):(2*w + 5)] = pred[0, :, :, :].detach().cpu().numpy()
 
     for i in range(im):
         image[:, :, (2 + i) * w + (2 + i) * 5:(3 + i) * w + (2 + i) * 5] = X_batch[0, i, :, :, :].detach().cpu().numpy()
